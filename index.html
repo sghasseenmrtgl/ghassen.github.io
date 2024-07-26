@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suivi des Demandes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -8,44 +11,70 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
+            padding: 20px;
         }
         h1 {
-            font-size: 3em;
+            font-size: 2em;
             color: #333;
-            animation: fadeIn 2s ease-in-out;
+            margin-bottom: 20px;
         }
-        p {
-            font-size: 1.5em;
-            color: #666;
-            animation: fadeIn 3s ease-in-out;
+        .task {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .task-name {
+            font-size: 1.2em;
+            margin-bottom: 5px;
         }
-        .chatbot-widget {
-            margin-top: 20px;
-            animation: slideIn 2s ease-in-out;
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 25px;
+            overflow: hidden;
         }
-        @keyframes slideIn {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .container {
-            text-align: center;
+        .progress {
+            height: 20px;
+            background-color: #76c7c0;
+            border-radius: 25px 0 0 25px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Bonjour</h1>
-        <p>Bienvenue sur le site de Ghassen.</p>
-    </div>
+    <h1>Suivi des Demandes</h1>
+    <div id="tasks-container"></div>
 
-    <script src="https://app.algomo.com/algomo.min.js" widget="66a0b1354b9dc2334950318f" async defer></script>
+    <script>
+        fetch('todos.json')
+            .then(response => response.json())
+            .then(data => {
+                const tasksContainer = document.getElementById('tasks-container');
+                data.forEach(task => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = 'task';
+                    
+                    const taskName = document.createElement('div');
+                    taskName.className = 'task-name';
+                    taskName.textContent = task.task;
+                    
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'progress-bar';
+                    
+                    const progress = document.createElement('div');
+                    progress.className = 'progress';
+                    progress.style.width = task.progress + '%';
+                    
+                    progressBar.appendChild(progress);
+                    taskElement.appendChild(taskName);
+                    taskElement.appendChild(progressBar);
+                    tasksContainer.appendChild(taskElement);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+
 </body>
 </html>
