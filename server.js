@@ -2,13 +2,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const { Configuration, OpenAIApi } = require('openai');
+require('dotenv').config(); // Charger les variables d'environnement
 
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const configuration = new Configuration({
-  apiKey: 'sk-proj-t461UD2G1cRQbEupryhWT3BlbkFJaHe2Jy8QqhZp8lVPOLLY', 
+  apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
