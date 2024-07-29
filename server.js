@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const configuration = new Configuration({
-  apiKey: 'VOTRE_CLE_API_OPENAI', // Remplacez par votre clé API
+  apiKey: 'sk-proj-t461UD2G1cRQbEupryhWT3BlbkFJaHe2Jy8QqhZp8lVPOLLY', 
 });
 const openai = new OpenAIApi(configuration);
 
