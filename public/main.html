@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YEPA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+        }
+        h1 {
+            font-size: 3em;
+            color: #333;
+            animation: fadeIn 2s ease-in-out;
+        }
+        p {
+            font-size: 1.5em;
+            color: #666;
+            animation: fadeIn 3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            color: white;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #555;
+        }
+        .chatbot-widget {
+            margin-top: 20px;
+            width: 300px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chatbot-widget h2 {
+            font-size: 1.5em;
+            color: #333;
+        }
+        .chatbot-widget .messages {
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .chatbot-widget .messages div {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .chatbot-widget .messages .user {
+            background-color: #e1ffc7;
+            text-align: right;
+        }
+        .chatbot-widget .messages .bot {
+            background-color: #f1f1f1;
+        }
+        .chatbot-widget input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .chatbot-widget button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chatbot-widget button:hover {
+            background-color: #555;
+        }
+        .container {
+            text-align: center;
+            padding-top: 60px; /* Space for the menu button */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Bonjour</h1>
+        <p>Bienvenue sur le site de Ghassen.</p>
+        <div class="buttons">
+            <button class="button" onclick="window.open('https://green-giraffe-e75.notion.site/TODO-e852dbd570c74bb7a101ea3f3e16467d?pvs=25', '_blank')">TODO</button>
+            <button class="button" onclick="window.location.href='calendrier.html'">BOOK</button>
+        </div>
+       
+        <div class="chatbot-widget">
+            <h2>Chatbot</h2>
+            <div class="messages" id="messages"></div>
+            <input type="text" id="userInput" placeholder="Posez votre question..." />
+            <button onclick="sendMessage()">Envoyer</button>
+        </div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('userInput').value;
+            if (!userInput) return;
+
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += `<div class="user">${userInput}</div>`;
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userInput }),
+            });
+            const data = await response.json();
+            messagesDiv.innerHTML += `<div class="bot">${data.reply}</div>`;
+            document.getElementById('userInput').value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
