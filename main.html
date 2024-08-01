@@ -29,77 +29,58 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        .buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            color: white;
-            background-color: #333;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .button:hover {
-            background-color: #555;
-        }
-        .chatbot-widget {
-            margin-top: 20px;
-            width: 300px;
+        .comment-section {
+            margin-top: 40px;
+            width: 80%;
+            max-width: 600px;
             background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
+            padding: 20px;
+            border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .chatbot-widget h2 {
-            font-size: 1.5em;
+        .comment-section h2 {
+            font-size: 2em;
             color: #333;
+            margin-bottom: 20px;
         }
-        .chatbot-widget .messages {
-            height: 200px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-        }
-        .chatbot-widget .messages div {
-            margin: 5px 0;
+        .comment-section p.note {
+            font-size: 1em;
+            color: #666;
+            background-color: #fff3cd;
             padding: 10px;
+            border: 1px solid #ffeeba;
             border-radius: 5px;
+            margin-bottom: 20px;
         }
-        .chatbot-widget .messages .user {
-            background-color: #e1ffc7;
-            text-align: right;
-        }
-        .chatbot-widget .messages .bot {
-            background-color: #f1f1f1;
-        }
-        .chatbot-widget input {
+        .comment-section textarea {
             width: calc(100% - 22px);
             padding: 10px;
-            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            margin-bottom: 10px;
         }
-        .chatbot-widget button {
-            width: 100%;
-            padding: 10px;
+        .comment-section button {
+            padding: 10px 20px;
             background-color: #333;
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
         }
-        .chatbot-widget button:hover {
+        .comment-section button:hover {
             background-color: #555;
         }
-        .container {
-            text-align: center;
-            padding-top: 60px; /* Space for the menu button */
+        .comments-display {
+            margin-top: 20px;
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .comments-display pre {
+            font-size: 1em;
+            color: #333;
         }
     </style>
 </head>
@@ -108,6 +89,48 @@
         <h1>Bienvenue sur notre page de test</h1>
         <p>Cette page est destinée à tester le chatbot qui se trouve en bas à gauche.</p>
     </div>
+    
+    <div class="comment-section">
+        <h2>Commentaires</h2>
+        <p class="note">Les questions sur les horaires peuvent être erronées, nous travaillons sur une solution avec l'équipe développement de Algomo.</p>
+        <textarea rows="5" id="comment" placeholder="Laissez votre commentaire ici..."></textarea>
+        <button type="button" id="submit-comment">Envoyer</button>
+    </div>
     <script src="https://app.algomo.com/algomo.min.js" widget="66a0b1354b9dc2334950318f" async defer></script>
+
+   
+
+    <script>
+        document.getElementById('submit-comment').addEventListener('click', function() {
+            const comment = document.getElementById('comment').value;
+            
+            fetch('http://localhost:3000/submit-comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ comment: comment })
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                document.getElementById('comment').value = ''; // Clear the textarea
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('load-comments').addEventListener('click', function() {
+            fetch('http://localhost:3000/comments')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('comments-output').textContent = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 </html>
